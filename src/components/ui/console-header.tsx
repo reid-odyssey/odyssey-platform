@@ -4,6 +4,8 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSepara
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { OdysseyLogo } from "./odyssey-logo"
 import { Bell, Settings, User, LogOut } from "lucide-react"
+import { ThemeToggle } from "./theme-toggle"
+import Link from "next/link"
 
 interface ConsoleHeaderProps {
   currentProject?: {
@@ -22,33 +24,35 @@ interface ConsoleHeaderProps {
   onProjectChange?: (projectId: string) => void
 }
 
-export function ConsoleHeader({ currentProject, projects = [], user, onProjectChange }: ConsoleHeaderProps) {
+export function ConsoleHeader({ currentProject, projects = [], user }: ConsoleHeaderProps) {
   return (
     <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="flex h-14 items-center px-4">
         <div className="flex items-center space-x-4">
-          <OdysseyLogo size="sm" />
-          
-          {currentProject && (
-            <>
-              <div className="h-6 w-px bg-border" />
-              <Select value={currentProject.id} onValueChange={onProjectChange}>
+          <div className="flex items-center space-x-4">
+            <Link href="/">
+              <OdysseyLogo size="sm" className="cursor-pointer" />
+            </Link>
+            
+            {currentProject && (
+              <Select defaultValue={currentProject.id}>
                 <SelectTrigger className="w-[200px]">
-                  <SelectValue placeholder="Select project" />
+                  <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  {projects.map((project) => (
+                  {projects?.map((project) => (
                     <SelectItem key={project.id} value={project.id}>
                       {project.name}
                     </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
-            </>
-          )}
+            )}
+          </div>
         </div>
 
         <div className="ml-auto flex items-center space-x-4">
+          <ThemeToggle />
           <Button variant="ghost" size="sm">
             <Bell className="h-4 w-4" />
           </Button>
