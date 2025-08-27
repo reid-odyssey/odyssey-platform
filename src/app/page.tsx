@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { ProjectCard } from "@/components/ui/project-card"
 import { OdysseyLogo } from "@/components/ui/odyssey-logo"
+import { ThemeToggle } from "@/components/ui/theme-toggle"
 import { Plus } from "lucide-react"
 
 // Mock data - in real app this would come from API
@@ -33,13 +34,16 @@ const mockProjects = [
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
-      <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="flex h-14 items-center px-6">
-          <OdysseyLogo />
-          <div className="ml-auto">
-            <Button variant="ghost" size="sm">
-              Sign Out
+    <div className="min-h-screen bg-background">
+      {/* Header */}
+      <header className="border-b">
+        <div className="flex h-16 items-center px-4">
+          <OdysseyLogo size="sm" />
+          <div className="ml-auto flex items-center space-x-4">
+            <ThemeToggle />
+            <Button>
+              <Plus className="mr-2 h-4 w-4" />
+              New Project
             </Button>
           </div>
         </div>
