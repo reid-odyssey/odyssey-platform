@@ -1,6 +1,9 @@
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import Link from "next/link"
+import { OdysseyLogo } from "@/components/ui/odyssey-logo"
 import { 
   Home, 
   Settings, 
@@ -19,6 +22,15 @@ interface SidebarProps {
   className?: string
   currentPath?: string
   projectId?: string
+  currentProject?: {
+    name: string
+    id: string
+  }
+  projects?: Array<{
+    name: string
+    id: string
+  }>
+  onProjectChange?: (projectId: string) => void
 }
 
 const navigationItems = [
@@ -82,7 +94,14 @@ const productItems = [
   },
 ]
 
-export function ConsoleSidebar({ className, currentPath, projectId }: SidebarProps) {
+export function ConsoleSidebar({ 
+  className, 
+  currentPath, 
+  projectId, 
+  currentProject,
+  projects = [],
+  onProjectChange 
+}: SidebarProps) {
   const getHref = (href: string) => {
     return projectId ? href.replace('[projectId]', projectId) : href
   }
@@ -93,12 +112,9 @@ export function ConsoleSidebar({ className, currentPath, projectId }: SidebarPro
   }
 
   return (
-    <div className={cn("pb-12 w-64", className)}>
+    <div className={cn("w-80 bg-muted/40 p-4", className)}>
       <div className="space-y-4 py-4">
         <div className="px-3 py-2">
-          <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">
-            Project
-          </h2>
           <div className="space-y-1">
             {navigationItems.map((item) => (
               <Button

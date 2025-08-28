@@ -1,11 +1,15 @@
+'use client'
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { OdysseyLogo } from "./odyssey-logo"
-import { Bell, Settings, User, LogOut } from "lucide-react"
-import { ThemeToggle } from "./theme-toggle"
+import { ThemeToggle } from "@/components/ui/theme-toggle"
+import { Bell, ChevronDown, User, LogOut, Settings } from "lucide-react"
 import Link from "next/link"
+import { OdysseyLogo } from "@/components/ui/odyssey-logo"
+import { useTheme } from "next-themes"
 
 interface ConsoleHeaderProps {
   currentProject?: {
@@ -25,30 +29,28 @@ interface ConsoleHeaderProps {
 }
 
 export function ConsoleHeader({ currentProject, projects = [], user }: ConsoleHeaderProps) {
+  const { theme, resolvedTheme } = useTheme()
+  const logoSrc = resolvedTheme === 'light' ? '/odyssey-logo-dark.svg' : '/odyssey-logo.svg'
+  
   return (
-    <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="flex h-14 items-center px-4">
-        <div className="flex items-center space-x-4">
-          <div className="flex items-center space-x-4">
-            <Link href="/">
-              <OdysseyLogo size="sm" className="cursor-pointer" />
-            </Link>
-            
-            {currentProject && (
-              <Select defaultValue={currentProject.id}>
-                <SelectTrigger className="w-[200px]">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {projects?.map((project) => (
-                    <SelectItem key={project.id} value={project.id}>
-                      {project.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            )}
-          </div>
+    <header className="bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div className="max-w-[2000px] mx-auto flex h-14 items-center px-4">
+        <div className="flex items-center space-x-4 w-80 pr-4">
+          <img src={logoSrc} alt="Odyssey" className="h-8 w-8 flex-shrink-0" />
+          {currentProject && (
+            <Select defaultValue={currentProject.id}>
+              <SelectTrigger className="flex-1">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {projects?.map((project) => (
+                  <SelectItem key={project.id} value={project.id}>
+                    {project.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          )}
         </div>
 
         <div className="ml-auto flex items-center space-x-4">
