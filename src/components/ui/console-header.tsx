@@ -26,9 +26,10 @@ interface ConsoleHeaderProps {
     avatar?: string
   }
   onProjectChange?: (projectId: string) => void
+  isChatOpen?: boolean
 }
 
-export function ConsoleHeader({ currentProject, projects = [], user }: ConsoleHeaderProps) {
+export function ConsoleHeader({ currentProject, projects = [], user, isChatOpen }: ConsoleHeaderProps) {
   const { theme, resolvedTheme } = useTheme()
   const logoSrc = resolvedTheme === 'light' ? '/odyssey-logo-dark.svg' : '/odyssey-logo.svg'
   

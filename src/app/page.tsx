@@ -1,10 +1,12 @@
 "use client"
 
+import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { ProjectCard } from "@/components/ui/project-card"
 import { OdysseyLogo } from "@/components/ui/odyssey-logo"
 import { ThemeToggle } from "@/components/ui/theme-toggle"
+import { ChatInterface } from "@/components/ui/chat-interface"
 import { Plus } from "lucide-react"
 
 // Mock data - in real app this would come from API
@@ -33,8 +35,14 @@ const mockProjects = [
 ]
 
 export default function Home() {
+  const [isChatOpen, setIsChatOpen] = useState(false)
+
+  const handleChatToggle = (isOpen: boolean) => {
+    setIsChatOpen(isOpen)
+  }
+
   return (
-    <div className="min-h-screen bg-background">
+    <div className={`min-h-screen bg-background transition-all duration-300 ease-out ${isChatOpen ? 'mr-[640px]' : ''}`}>
       {/* Header */}
       <header className="border-b">
         <div className="flex h-16 items-center px-4">
@@ -110,6 +118,11 @@ export default function Home() {
           </Card>
         </div>
       </main>
+      
+      {/* Chat Interface */}
+      <div className={`fixed right-0 top-0 h-full transition-all duration-300 ease-out ${isChatOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+        <ChatInterface onToggle={handleChatToggle} />
+      </div>
     </div>
   )
 }

@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useRouter } from "next/navigation"
 import { ConsoleHeader } from "@/components/ui/console-header"
 import { ConsoleSidebar } from "@/components/ui/console-sidebar"
 import { ProductHero } from "@/components/ui/product-hero"
@@ -13,6 +14,7 @@ import { ProductMonitoring } from "@/components/ui/product-monitoring"
 import { ProductAnalytics } from "@/components/ui/product-analytics"
 import { ProductUsage } from "@/components/ui/product-usage"
 import { ProductQuickStart } from "@/components/ui/product-quick-start"
+import { ChatInterface } from "@/components/ui/chat-interface"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Button } from "@/components/ui/button"
 import { ArrowLeft } from "lucide-react"
@@ -24,9 +26,9 @@ interface ProductPageTemplateProps {
   productStatus: "enabled" | "disabled" | "beta"
   projectId: string
   currentPath: string
-  mockProject: any
-  mockProjects: any[]
-  mockUser: any
+  mockProject?: { id: string; name: string }
+  mockProjects?: Array<{ id: string; name: string }>
+  mockUser?: { name: string; email: string; avatar?: string }
 }
 
 export function ProductPageTemplate({
@@ -36,55 +38,61 @@ export function ProductPageTemplate({
   productStatus,
   projectId,
   currentPath,
-  mockProject,
-  mockProjects,
-  mockUser
+  mockProject: propMockProject,
+  mockProjects: propMockProjects,
+  mockUser: propMockUser,
 }: ProductPageTemplateProps) {
-  const [isEngaged, setIsEngaged] = useState(false)
+  const router = useRouter()
+  const [isEngaged, setIsEngaged] = useState(true)
+  const [isChatOpen, setIsChatOpen] = useState(false)
 
   const handleGetStarted = () => {
     setIsEngaged(true)
   }
 
   const handleBackToOverview = () => {
-    setIsEngaged(false)
+    router.push(`/project/${projectId}`)
   }
+
+  const handleChatToggle = (isOpen: boolean) => {
+    setIsChatOpen(isOpen)
+  }
+
+  // Use provided mock data or fallback to defaults
+  const mockProject = propMockProject || { id: projectId, name: "Sample Project" }
+  const mockProjects = propMockProjects || [mockProject]
+  const mockUser = propMockUser || { name: "User", email: "user@example.com" }
 
   if (!isEngaged) {
     // Pre-engagement state: Firebase-style marketing page
     return (
-      <div className="min-h-screen bg-background">
+      <div className={`min-h-screen bg-background transition-all duration-300 ease-out ${isChatOpen ? 'mr-[640px]' : ''}`}>
         <ConsoleHeader 
           currentProject={mockProject}
           projects={mockProjects}
           user={mockUser}
+          isChatOpen={false}
         />
-        
         <div className="max-w-[2000px] mx-auto">
-          <div className="flex">
-            <ConsoleSidebar 
-              projectId={projectId}
-              currentPath={currentPath}
-              currentProject={mockProject}
-              projects={mockProjects}
+          <main className="px-6 py-12">
+            <ProductHero 
+              name={productName}
+              description={productDescription}
+              icon={productIcon}
+              status={productStatus}
+              onGetStarted={handleGetStarted}
             />
-            
-            <main className="flex-1">
-              <ProductHero
-                name={productName}
-                description={productDescription}
-                icon={productIcon}
-                status={productStatus}
-                onGetStarted={handleGetStarted}
-              />
-              
+            <div className="mt-16 space-y-16">
               <ProductLearnMore productName={productName} />
-              
               <ProductSampleApps productName={productName} />
-              
               <ProductCommunity productName={productName} />
-            </main>
-          </div>
+            </div>
+          </main>
+        </div>
+        
+        {/* Chat Interface */}
+        <div className={`fixed right-0 top-0 h-full transition-all duration-300 ease-out ${isChatOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+          <ChatInterface onToggle={handleChatToggle} />
         </div>
       </div>
     )
@@ -92,11 +100,12 @@ export function ProductPageTemplate({
 
   // Post-engagement state: Console dashboard
   return (
-    <div className="min-h-screen bg-background">
+    <div className={`min-h-screen bg-background transition-all duration-300 ease-out ${isChatOpen ? 'mr-[640px]' : ''}`}>
       <ConsoleHeader 
         currentProject={mockProject}
         projects={mockProjects}
         user={mockUser}
+        isChatOpen={false}
       />
       
       <div className="max-w-[2000px] mx-auto">
@@ -161,6 +170,11 @@ export function ProductPageTemplate({
               </Tabs>
           </main>
         </div>
+      </div>
+      
+      {/* Chat Interface */}
+      <div className={`fixed right-0 top-0 h-full transition-all duration-300 ease-out ${isChatOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+        <ChatInterface onToggle={handleChatToggle} />
       </div>
     </div>
   )
