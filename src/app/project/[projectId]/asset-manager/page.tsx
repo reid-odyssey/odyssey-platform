@@ -29,6 +29,7 @@ export default function AssetManagerPage({ params }: { params: { projectId: stri
       mockProject={mockProject}
       mockProjects={mockProjects}
       mockUser={mockUser}
+      initialEngaged={false}
     />
   )
 }

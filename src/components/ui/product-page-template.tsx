@@ -29,6 +29,7 @@ interface ProductPageTemplateProps {
   mockProject?: { id: string; name: string }
   mockProjects?: Array<{ id: string; name: string }>
   mockUser?: { name: string; email: string; avatar?: string }
+  initialEngaged?: boolean
 }
 
 export function ProductPageTemplate({
@@ -41,17 +42,29 @@ export function ProductPageTemplate({
   mockProject: propMockProject,
   mockProjects: propMockProjects,
   mockUser: propMockUser,
+  initialEngaged = false,
 }: ProductPageTemplateProps) {
   const router = useRouter()
-  const [isEngaged, setIsEngaged] = useState(true)
+  const [isEngaged, setIsEngaged] = useState(initialEngaged)
+  const [hasEverEngaged, setHasEverEngaged] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const stored = localStorage.getItem(`odyssey-engaged-${productName}`)
+      return stored === 'true' || initialEngaged
+    }
+    return initialEngaged
+  })
   const [isChatOpen, setIsChatOpen] = useState(false)
 
   const handleGetStarted = () => {
     setIsEngaged(true)
+    setHasEverEngaged(true)
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(`odyssey-engaged-${productName}`, 'true')
+    }
   }
 
   const handleBackToOverview = () => {
-    router.push(`/project/${projectId}`)
+    setIsEngaged(false)
   }
 
   const handleChatToggle = (isOpen: boolean) => {
@@ -62,7 +75,7 @@ export function ProductPageTemplate({
   const mockProject = propMockProject || { id: projectId, name: "Sample Project" }
   const mockProjects = propMockProjects || [mockProject]
   const mockUser = propMockUser || { name: "User", email: "user@example.com" }
-
+  
   if (!isEngaged) {
     // Pre-engagement state: Firebase-style marketing page
     return (
@@ -74,20 +87,29 @@ export function ProductPageTemplate({
           isChatOpen={false}
         />
         <div className="max-w-[2000px] mx-auto">
-          <main className="px-6 py-12">
-            <ProductHero 
-              name={productName}
-              description={productDescription}
-              icon={productIcon}
-              status={productStatus}
-              onGetStarted={handleGetStarted}
+          <div className="flex">
+            <ConsoleSidebar 
+              projectId={projectId}
+              currentPath={currentPath}
+              currentProject={mockProject}
+              projects={mockProjects}
             />
-            <div className="mt-16 space-y-16">
-              <ProductLearnMore productName={productName} />
-              <ProductSampleApps productName={productName} />
-              <ProductCommunity productName={productName} />
-            </div>
-          </main>
+            <main className="flex-1 px-6 py-12">
+              <ProductHero 
+                name={productName}
+                description={productDescription}
+                icon={productIcon}
+                status={productStatus}
+                onGetStarted={handleGetStarted}
+                hasEverEngaged={hasEverEngaged}
+              />
+              <div className="mt-16 space-y-16">
+                <ProductLearnMore productName={productName} />
+                <ProductSampleApps productName={productName} />
+                <ProductCommunity productName={productName} />
+              </div>
+            </main>
+          </div>
         </div>
         
         {/* Chat Interface */}

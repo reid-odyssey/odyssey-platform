@@ -11,9 +11,10 @@ interface ProductHeroProps {
   icon: React.ReactNode
   status: "enabled" | "disabled" | "beta"
   onGetStarted: () => void
+  hasEverEngaged?: boolean
 }
 
-export function ProductHero({ name, description, icon, status, onGetStarted }: ProductHeroProps) {
+export function ProductHero({ name, description, icon, status, onGetStarted, hasEverEngaged = false }: ProductHeroProps) {
   const statusColors = {
     enabled: "bg-green-100 text-green-800 border-green-200",
     disabled: "bg-gray-100 text-gray-800 border-gray-200", 
@@ -40,7 +41,7 @@ export function ProductHero({ name, description, icon, status, onGetStarted }: P
 
             <div className="flex flex-col sm:flex-row gap-4">
               <Button size="lg" onClick={onGetStarted} className="text-lg px-8">
-                Get Started
+                {hasEverEngaged ? "Open Console" : "Get Started"}
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
               <Button variant="outline" size="lg" className="text-lg px-8">
