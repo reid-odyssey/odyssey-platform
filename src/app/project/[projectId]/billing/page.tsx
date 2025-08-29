@@ -183,7 +183,7 @@ export default function BillingPage({ params }: { params: { projectId: string } 
                         <span>Tax (8.5%)</span>
                         <span>$10.84</span>
                       </div>
-                      <div className="border-t pt-4">
+                      <div className="border-t dark:border-transparent dark:bg-muted/45 pt-4">
                         <div className="flex justify-between items-center font-semibold text-lg">
                           <span>Total</span>
                           <span>$138.34</span>
@@ -249,7 +249,7 @@ export default function BillingPage({ params }: { params: { projectId: string } 
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-4">
-                      <div className="flex items-center justify-between p-4 border rounded-lg">
+                      <div className="flex items-center justify-between p-4 border dark:border-transparent dark:bg-muted/45 rounded-lg">
                         <div className="flex items-center space-x-3">
                           <CreditCard className="h-8 w-8 text-muted-foreground" />
                           <div>
@@ -279,7 +279,7 @@ export default function BillingPage({ params }: { params: { projectId: string } 
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-4">
-                      <div className="flex items-center justify-between p-4 border rounded-lg">
+                      <div className="flex items-center justify-between p-4 border dark:border-transparent dark:bg-muted/45 rounded-lg">
                         <div className="flex items-center space-x-3">
                           <AlertCircle className="h-5 w-5 text-orange-500" />
                           <div>

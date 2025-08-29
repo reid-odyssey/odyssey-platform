@@ -44,7 +44,7 @@ export default function Home() {
   return (
     <div className={`min-h-screen bg-background transition-all duration-300 ease-out ${isChatOpen ? 'mr-[640px]' : ''}`}>
       {/* Header */}
-      <header className="border-b">
+      <header className="border-b dark:border-transparent dark:bg-muted/45">
         <div className="flex h-16 items-center px-4">
           <OdysseyLogo size="sm" />
           <div className="ml-auto flex items-center space-x-4">

@@ -166,7 +166,7 @@ export function ConsoleSidebar({
         
         <Separator />
         
-        <div className="px-3 py-2">
+        <div className="px-3 py-2 dark:bg-muted/60 rounded-lg border dark:border-transparent">
           <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">
             Products
           </h2>

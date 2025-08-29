@@ -263,7 +263,7 @@ export default function ProjectOverview({ params }: { params: Promise<{ projectI
               <CardContent>
                 <div className="space-y-4">
                   {products.filter(product => product.status === 'enabled').map((product, index) => (
-                    <div key={product.name} className={`flex items-center justify-between p-3 hover:bg-muted/50 transition-colors ${index % 2 === 1 ? 'bg-muted/20' : ''}`}>
+                    <div key={product.name} className={`flex items-center justify-between p-3 hover:bg-muted/50 transition-colors cursor-pointer ${index % 2 === 1 ? 'bg-muted/20' : ''}`}>
                       <div className="flex items-center space-x-3">
                         <div className="p-2 bg-primary/10 rounded-lg">
                           {product.icon}
