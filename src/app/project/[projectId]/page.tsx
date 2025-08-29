@@ -33,12 +33,12 @@ import {
 
 // Mock data - in real app this would come from API
 const mockProject = {
-  name: "odyssey-console",
+  name: "agency-prod",
   id: "proj_123456789"
 }
 
 const mockProjects = [
-  { name: "odyssey-console", id: "proj_123456789" },
+  { name: "agency-prod", id: "proj_123456789" },
   { name: "Demo Project", id: "proj_987654321" },
 ]
 
@@ -138,7 +138,7 @@ export default function ProjectOverview({ params }: { params: Promise<{ projectI
                 </div>
                 <Button>
                   <Plus className="mr-2 h-4 w-4" />
-                  Add Service
+                  New Project
                 </Button>
               </div>
 
@@ -165,19 +165,23 @@ export default function ProjectOverview({ params }: { params: Promise<{ projectI
                     </div>
                     <div className="flex-1">
                       <div className="flex items-center space-x-2 mb-1">
-                        <h3 className="font-semibold">Web Application Template</h3>
+                        <h3 className="font-semibold">Odyssey Metaverse</h3>
                         <Badge variant="secondary" className="bg-primary/10 text-primary">
                           Active
                         </Badge>
                       </div>
                       <p className="text-sm text-muted-foreground mb-2">
-                        Full-stack web application with React frontend, Node.js backend, and PostgreSQL database
+                        Comprehensive metaverse platform utilizing Asset Manager, Content Delivery, Spatial Comms, Avatar, Multi-player, Configurator, Real Time Engine, and Hosting
                       </p>
                       <div className="flex items-center space-x-4 text-xs text-muted-foreground">
-                        <span>• Frontend: React 18</span>
-                        <span>• Backend: Node.js + Express</span>
-                        <span>• Database: PostgreSQL</span>
-                        <span>• Hosting: Vercel</span>
+                        <span>• Asset Manager</span>
+                        <span>• Content Delivery</span>
+                        <span>• Spatial Comms</span>
+                        <span>• Avatar</span>
+                        <span>• Multi-player</span>
+                        <span>• Configurator</span>
+                        <span>• Real Time Engine</span>
+                        <span>• Hosting</span>
                       </div>
                     </div>
                     <div className="text-right">
@@ -193,46 +197,25 @@ export default function ProjectOverview({ params }: { params: Promise<{ projectI
               <CardHeader>
                 <CardTitle>App Hosting</CardTitle>
                 <CardDescription>
-                  Deploy and manage your spatial applications with global edge delivery
+                  Active apps in project
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="grid gap-4 md:grid-cols-2">
-                  <Card>
+                <div className="grid gap-4">
+                  <Card className="max-w-md">
                     <CardContent className="p-4">
                       <div className="flex items-center space-x-3 mb-3">
                         <div className="p-2 bg-primary/10 rounded-lg">
                           <Server className="h-5 w-5 text-primary" />
                         </div>
                         <div>
-                          <h3 className="font-medium">Production Environment</h3>
-                          <p className="text-sm text-muted-foreground">odyssey-console.app</p>
+                          <h3 className="font-medium">Colgate Toothpaste World</h3>
+                          <p className="text-sm text-muted-foreground">colgate-toothpaste-world</p>
                         </div>
                       </div>
                       <div className="flex items-center justify-between">
                         <Badge variant="secondary" className="bg-green-100 text-green-800">
                           Active
-                        </Badge>
-                        <Button variant="outline" size="sm">
-                          Manage
-                        </Button>
-                      </div>
-                    </CardContent>
-                  </Card>
-                  <Card>
-                    <CardContent className="p-4">
-                      <div className="flex items-center space-x-3 mb-3">
-                        <div className="p-2 bg-primary/10 rounded-lg">
-                          <Server className="h-5 w-5 text-primary" />
-                        </div>
-                        <div>
-                          <h3 className="font-medium">Staging Environment</h3>
-                          <p className="text-sm text-muted-foreground">staging-odyssey-console.app</p>
-                        </div>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <Badge variant="secondary" className="bg-yellow-100 text-yellow-800">
-                          Idle
                         </Badge>
                         <Button variant="outline" size="sm">
                           Manage
@@ -262,7 +245,7 @@ export default function ProjectOverview({ params }: { params: Promise<{ projectI
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {products.filter(product => product.status === 'enabled').map((product, index) => (
+                  {products.filter(product => !['Spatial Anchor', 'Spatial UI'].includes(product.name)).map((product, index) => (
                     <div key={product.name} className={`flex items-center justify-between p-3 hover:bg-muted/50 transition-colors cursor-pointer ${index % 2 === 1 ? 'bg-muted/20' : ''}`}>
                       <div className="flex items-center space-x-3">
                         <div className="p-2 bg-primary/10 rounded-lg">

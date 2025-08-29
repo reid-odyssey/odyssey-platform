@@ -22,12 +22,12 @@ import {
 } from "lucide-react"
 
 const mockProject = {
-  name: "odyssey-console",
+  name: "agency-prod",
   id: "proj_123456789"
 }
 
 const mockProjects = [
-  { name: "odyssey-console", id: "proj_123456789" },
+  { name: "agency-prod", id: "proj_123456789" },
   { name: "Demo Project", id: "proj_987654321" },
 ]
 

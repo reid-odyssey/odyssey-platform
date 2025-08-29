@@ -70,7 +70,7 @@ export function ProductSdkLinks({ productName }: ProductSdkLinksProps) {
           Official {productName} SDKs and libraries for different platforms
         </CardDescription>
       </CardHeader>
-      <CardContent className="space-y-4">
+      <CardContent className="space-y-4 max-h-64 overflow-y-auto">
         {sdks.map((sdk, index) => (
           <div key={index} className="border rounded-lg p-4">
             <div className="flex items-start justify-between mb-3">

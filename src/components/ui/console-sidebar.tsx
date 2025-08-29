@@ -3,26 +3,28 @@ import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { 
+  Settings, 
+  ChevronDown, 
   Users, 
-  Activity, 
-  DollarSign, 
-  Database,
+  CreditCard, 
+  BarChart3, 
   Package, 
-  Truck, 
+  Zap, 
+  Globe, 
   MessageSquare, 
-  User, 
   Palette, 
+  Anchor, 
+  Monitor, 
+  Activity, 
   Layout, 
   Server,
-  Settings,
   FileText,
   Clock,
-  Anchor,
   Gamepad2,
-  Zap,
   Plus,
   Home,
-  CreditCard
+  Truck,
+  User
 } from "lucide-react"
 
 interface SidebarProps {
@@ -232,6 +234,16 @@ export function ConsoleSidebar({
               <a href="/support">
                 <Settings className="mr-2 h-4 w-4" />
                 Support
+              </a>
+            </Button>
+            <Button
+              variant="ghost"
+              className="w-full justify-start"
+              asChild
+            >
+              <a href="/status">
+                <Activity className="mr-2 h-4 w-4" />
+                Status
               </a>
             </Button>
           </div>
