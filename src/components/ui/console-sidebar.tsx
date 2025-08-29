@@ -2,20 +2,27 @@ import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import Link from "next/link"
-import { OdysseyLogo } from "@/components/ui/odyssey-logo"
 import { 
-  Home, 
-  Settings, 
   Users, 
-  CreditCard, 
+  Activity, 
+  DollarSign, 
+  Database,
   Package, 
   Truck, 
   MessageSquare, 
   User, 
   Palette, 
   Layout, 
-  Server 
+  Server,
+  Settings,
+  FileText,
+  Clock,
+  Anchor,
+  Gamepad2,
+  Zap,
+  Plus,
+  Home,
+  CreditCard
 } from "lucide-react"
 
 interface SidebarProps {
@@ -61,36 +68,61 @@ const productItems = [
     title: "Asset Manager",
     href: "/project/[projectId]/asset-manager",
     icon: Package,
+    isActive: true,
   },
   {
     title: "Content Delivery",
     href: "/project/[projectId]/content-delivery",
     icon: Truck,
+    isActive: false,
   },
   {
     title: "Spatial Comms",
     href: "/project/[projectId]/spatial-comms",
     icon: MessageSquare,
+    isActive: true,
   },
   {
-    title: "Avatar",
+    title: "Avatar SSO",
     href: "/project/[projectId]/avatar",
     icon: User,
+    isActive: false,
+  },
+  {
+    title: "Multi-player",
+    href: "/project/[projectId]/multi-player",
+    icon: Users,
+    isActive: false,
   },
   {
     title: "Configurator",
     href: "/project/[projectId]/configurator",
     icon: Palette,
+    isActive: false,
   },
   {
     title: "Spatial UI",
     href: "/project/[projectId]/spatial-ui",
     icon: Layout,
+    isActive: false,
+  },
+  {
+    title: "Spatial Anchor",
+    href: "/project/[projectId]/spatial-anchor",
+    icon: Anchor,
+    isActive: false,
+  },
+  {
+    title: "Real Time Engine",
+    href: "/project/[projectId]/real-time-engine",
+    icon: Zap,
+    isActive: false,
   },
   {
     title: "Hosting",
     href: "/project/[projectId]/hosting",
     icon: Server,
+    isActive: false,
   },
 ]
 
@@ -143,15 +175,65 @@ export function ConsoleSidebar({
               <Button
                 key={item.href}
                 variant={isActive(item.href) ? "secondary" : "ghost"}
-                className="w-full justify-start"
+                className="w-full justify-start relative"
                 asChild
               >
                 <a href={getHref(item.href)}>
                   <item.icon className="mr-2 h-4 w-4" />
                   {item.title}
+                  {item.isActive && (
+                    <div className="ml-auto w-2 h-2 bg-primary rounded-full"></div>
+                  )}
                 </a>
               </Button>
             ))}
+          </div>
+        </div>
+        
+        <Separator />
+        
+        <div className="px-3 py-2">
+          <div className="space-y-1">
+            <Button
+              variant="ghost"
+              className="w-full justify-start"
+              asChild
+            >
+              <a href="/templates">
+                <Package className="mr-2 h-4 w-4" />
+                Template Library
+              </a>
+            </Button>
+            <Button
+              variant="ghost"
+              className="w-full justify-start"
+              asChild
+            >
+              <a href="/documentation">
+                <FileText className="mr-2 h-4 w-4" />
+                Documentation
+              </a>
+            </Button>
+            <Button
+              variant="ghost"
+              className="w-full justify-start"
+              asChild
+            >
+              <a href="/discord" target="_blank" rel="noopener noreferrer">
+                <MessageSquare className="mr-2 h-4 w-4" />
+                Discord
+              </a>
+            </Button>
+            <Button
+              variant="ghost"
+              className="w-full justify-start"
+              asChild
+            >
+              <a href="/support">
+                <Settings className="mr-2 h-4 w-4" />
+                Support
+              </a>
+            </Button>
           </div>
         </div>
       </div>

@@ -30,6 +30,8 @@ export default function AssetManagerPage({ params }: { params: { projectId: stri
       mockProjects={mockProjects}
       mockUser={mockUser}
       initialEngaged={false}
+      showComingSoon={true}
+      releaseDate="September 2025"
     />
   )
 }

@@ -1,5 +1,8 @@
+"use client"
+
 import { ConsoleHeader } from "@/components/ui/console-header"
 import { ConsoleSidebar } from "@/components/ui/console-sidebar"
+import { ChatInterface } from "@/components/ui/chat-interface"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -10,6 +13,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { useState } from "react"
 import { MoreHorizontal, Plus, Send, Shield, User, Crown } from "lucide-react"
 
 const mockProject = {
@@ -82,22 +86,32 @@ const roleColors = {
 }
 
 export default function UsersPage({ params }: { params: { projectId: string } }) {
+  const [isChatOpen, setIsChatOpen] = useState(false)
+
+  const handleChatToggle = (isOpen: boolean) => {
+    setIsChatOpen(isOpen)
+  }
+
   return (
-    <div className="min-h-screen bg-background">
+    <div className={`min-h-screen bg-background transition-all duration-300 ease-out ${isChatOpen ? 'mr-[640px]' : ''}`}>
       <ConsoleHeader 
         currentProject={mockProject}
         projects={mockProjects}
         user={mockUser}
+        isChatOpen={false}
       />
       
-      <div className="flex">
-        <ConsoleSidebar 
-          projectId={params.projectId}
-          currentPath={`/project/${params.projectId}/users`}
-        />
-        
-        <main className="flex-1 p-6">
-          <div className="max-w-7xl mx-auto space-y-6">
+      <div className="max-w-[2000px] mx-auto">
+        <div className="flex">
+          <ConsoleSidebar 
+            projectId={params.projectId}
+            currentPath={`/project/${params.projectId}/users`}
+            currentProject={mockProject}
+            projects={mockProjects}
+          />
+          
+          <main className="flex-1 p-6">
+            <div className="space-y-6">
             <div className="flex items-center justify-between">
               <div>
                 <h1 className="text-3xl font-bold">Users & Permissions</h1>
@@ -332,7 +346,13 @@ export default function UsersPage({ params }: { params: { projectId: string } })
               </CardContent>
             </Card>
           </div>
-        </main>
+          </main>
+        </div>
+      </div>
+      
+      {/* Chat Interface */}
+      <div className={`fixed right-0 top-0 h-full transition-all duration-300 ease-out ${isChatOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+        <ChatInterface onToggle={handleChatToggle} />
       </div>
     </div>
   )

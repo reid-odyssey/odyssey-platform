@@ -1,5 +1,5 @@
 import { ProductPageTemplate } from "@/components/ui/product-page-template"
-import { Server } from "lucide-react"
+import { User } from "lucide-react"
 
 const mockProject = {
   name: "odyssey-console",
@@ -17,21 +17,21 @@ const mockUser = {
   avatar: "/avatars/john.jpg"
 }
 
-export default function HostingPage({ params }: { params: { projectId: string } }) {
+export default function AvatarPage({ params }: { params: { projectId: string } }) {
   return (
     <ProductPageTemplate
-      productName="Hosting"
-      productDescription="Deploy and host your spatial applications with global edge delivery"
-      productIcon={<Server className="h-8 w-8" />}
+      productName="Avatar SSO"
+      productDescription="Create and manage realistic avatars for spatial experiences"
+      productIcon={<User className="h-8 w-8" />}
       productStatus="enabled"
       projectId={params.projectId}
-      currentPath={`/project/${params.projectId}/hosting`}
+      currentPath={`/project/${params.projectId}/avatar`}
       mockProject={mockProject}
       mockProjects={mockProjects}
       mockUser={mockUser}
       initialEngaged={false}
       showComingSoon={true}
-      releaseDate="December 2025"
+      releaseDate="November 2025"
     />
   )
 }

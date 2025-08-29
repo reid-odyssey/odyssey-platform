@@ -30,6 +30,8 @@ interface ProductPageTemplateProps {
   mockProjects?: Array<{ id: string; name: string }>
   mockUser?: { name: string; email: string; avatar?: string }
   initialEngaged?: boolean
+  showComingSoon?: boolean
+  releaseDate?: string
 }
 
 export function ProductPageTemplate({
@@ -43,6 +45,8 @@ export function ProductPageTemplate({
   mockProjects: propMockProjects,
   mockUser: propMockUser,
   initialEngaged = false,
+  showComingSoon = false,
+  releaseDate,
 }: ProductPageTemplateProps) {
   const router = useRouter()
   const [isEngaged, setIsEngaged] = useState(initialEngaged)
@@ -79,7 +83,7 @@ export function ProductPageTemplate({
   if (!isEngaged) {
     // Pre-engagement state: Firebase-style marketing page
     return (
-      <div className={`min-h-screen bg-background transition-all duration-300 ease-out ${isChatOpen ? 'mr-[640px]' : ''}`}>
+      <div className={`min-h-screen bg-background transition-all duration-300 ease-out ${isChatOpen ? 'mr-[640px]' : ''} relative`}>
         <ConsoleHeader 
           currentProject={mockProject}
           projects={mockProjects}
@@ -94,7 +98,7 @@ export function ProductPageTemplate({
               currentProject={mockProject}
               projects={mockProjects}
             />
-            <main className="flex-1 px-6 py-12">
+            <main className="flex-1 px-6 py-12 relative overflow-hidden">
               <ProductHero 
                 name={productName}
                 description={productDescription}
@@ -108,6 +112,27 @@ export function ProductPageTemplate({
                 <ProductSampleApps productName={productName} />
                 <ProductCommunity productName={productName} />
               </div>
+              
+              {/* Coming Soon Banner - Only covers this main content */}
+              {showComingSoon && (
+                <div className="absolute inset-0 bg-background/45 backdrop-blur-sm z-50 flex items-start justify-center pt-40">
+                  <div className="text-center">
+                    <div className="mx-auto w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-4">
+                      {productIcon}
+                    </div>
+                    <h2 className="text-2xl font-bold mb-2 text-foreground">{productName}</h2>
+                    <p className="text-muted-foreground mb-6">Coming Soon</p>
+                    <p className="text-sm text-muted-foreground mb-4">
+                      This product is scheduled for pre-release beta.
+                    </p>
+                    {releaseDate && (
+                      <p className="text-sm font-medium text-primary">
+                        Expected Pre-release: {releaseDate}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              )}
             </main>
           </div>
         </div>
@@ -122,7 +147,7 @@ export function ProductPageTemplate({
 
   // Post-engagement state: Console dashboard
   return (
-    <div className={`min-h-screen bg-background transition-all duration-300 ease-out ${isChatOpen ? 'mr-[640px]' : ''}`}>
+    <div className={`min-h-screen bg-background transition-all duration-300 ease-out ${isChatOpen ? 'mr-[640px]' : ''} relative`}>
       <ConsoleHeader 
         currentProject={mockProject}
         projects={mockProjects}
@@ -139,7 +164,7 @@ export function ProductPageTemplate({
             projects={mockProjects}
           />
           
-          <main className="flex-1 p-6">
+          <main className="flex-1 p-6 relative overflow-hidden">
             {/* Page Header Section */}
             <div className="pb-8 mb-8">
               <div className="space-y-6">
@@ -190,6 +215,27 @@ export function ProductPageTemplate({
                   <ProductUsage productName={productName} />
                 </TabsContent>
               </Tabs>
+              
+              {/* Coming Soon Banner - Only covers this main content */}
+              {showComingSoon && (
+                <div className="absolute inset-0 bg-background/45 backdrop-blur-sm z-50 flex items-start justify-center pt-40">
+                  <div className="text-center">
+                    <div className="mx-auto w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-4">
+                      {productIcon}
+                    </div>
+                    <h2 className="text-2xl font-bold mb-2 text-foreground">{productName}</h2>
+                    <p className="text-muted-foreground mb-6">Coming Soon</p>
+                    <p className="text-sm text-muted-foreground mb-4">
+                      This product is scheduled for pre-release beta.
+                    </p>
+                    {releaseDate && (
+                      <p className="text-sm font-medium text-primary">
+                        Expected Pre-release: {releaseDate}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              )}
           </main>
         </div>
       </div>

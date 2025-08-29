@@ -31,7 +31,7 @@ interface ConsoleHeaderProps {
 
 export function ConsoleHeader({ currentProject, projects = [], user, isChatOpen }: ConsoleHeaderProps) {
   const { theme, resolvedTheme } = useTheme()
-  const logoSrc = resolvedTheme === 'light' ? '/odyssey-logo-dark.svg' : '/odyssey-logo.svg'
+  const logoSrc = '/odyssey-logo-dark.svg' // Use consistent logo to avoid hydration mismatch
   
   return (
     <header className="bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">

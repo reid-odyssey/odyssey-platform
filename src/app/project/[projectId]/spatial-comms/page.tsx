@@ -1,5 +1,5 @@
 import { ProductPageTemplate } from "@/components/ui/product-page-template"
-import { Server } from "lucide-react"
+import { MessageSquare } from "lucide-react"
 
 const mockProject = {
   name: "odyssey-console",
@@ -17,21 +17,19 @@ const mockUser = {
   avatar: "/avatars/john.jpg"
 }
 
-export default function HostingPage({ params }: { params: { projectId: string } }) {
+export default function SpatialCommsPage({ params }: { params: { projectId: string } }) {
   return (
     <ProductPageTemplate
-      productName="Hosting"
-      productDescription="Deploy and host your spatial applications with global edge delivery"
-      productIcon={<Server className="h-8 w-8" />}
+      productName="Spatial Comms"
+      productDescription="Real-time communication and collaboration in spatial environments"
+      productIcon={<MessageSquare className="h-8 w-8" />}
       productStatus="enabled"
       projectId={params.projectId}
-      currentPath={`/project/${params.projectId}/hosting`}
+      currentPath={`/project/${params.projectId}/spatial-comms`}
       mockProject={mockProject}
       mockProjects={mockProjects}
       mockUser={mockUser}
       initialEngaged={false}
-      showComingSoon={true}
-      releaseDate="December 2025"
     />
   )
 }

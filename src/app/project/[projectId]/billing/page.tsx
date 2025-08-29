@@ -1,5 +1,8 @@
+"use client"
+
 import { ConsoleHeader } from "@/components/ui/console-header"
 import { ConsoleSidebar } from "@/components/ui/console-sidebar"
+import { ChatInterface } from "@/components/ui/chat-interface"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -7,6 +10,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Progress } from "@/components/ui/progress"
 import { StatsCard } from "@/components/ui/stats-card"
+import { useState } from "react"
 import { 
   CreditCard, 
   DollarSign, 
@@ -49,22 +53,32 @@ const invoiceHistory = [
 ]
 
 export default function BillingPage({ params }: { params: { projectId: string } }) {
+  const [isChatOpen, setIsChatOpen] = useState(false)
+
+  const handleChatToggle = (isOpen: boolean) => {
+    setIsChatOpen(isOpen)
+  }
+
   return (
-    <div className="min-h-screen bg-background">
+    <div className={`min-h-screen bg-background transition-all duration-300 ease-out ${isChatOpen ? 'mr-[640px]' : ''}`}>
       <ConsoleHeader 
         currentProject={mockProject}
         projects={mockProjects}
         user={mockUser}
+        isChatOpen={false}
       />
       
-      <div className="flex">
-        <ConsoleSidebar 
-          projectId={params.projectId}
-          currentPath={`/project/${params.projectId}/billing`}
-        />
-        
-        <main className="flex-1 p-6">
-          <div className="max-w-7xl mx-auto space-y-6">
+      <div className="max-w-[2000px] mx-auto">
+        <div className="flex">
+          <ConsoleSidebar 
+            projectId={params.projectId}
+            currentPath={`/project/${params.projectId}/billing`}
+            currentProject={mockProject}
+            projects={mockProjects}
+          />
+          
+          <main className="flex-1 p-6">
+            <div className="space-y-6">
             <div className="flex items-center justify-between">
               <div>
                 <h1 className="text-3xl font-bold">Billing & Usage</h1>
@@ -286,7 +300,13 @@ export default function BillingPage({ params }: { params: { projectId: string } 
               </TabsContent>
             </Tabs>
           </div>
-        </main>
+          </main>
+        </div>
+      </div>
+      
+      {/* Chat Interface */}
+      <div className={`fixed right-0 top-0 h-full transition-all duration-300 ease-out ${isChatOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+        <ChatInterface onToggle={handleChatToggle} />
       </div>
     </div>
   )
