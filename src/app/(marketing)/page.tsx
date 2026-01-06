@@ -5,6 +5,7 @@ import { ProductCard } from "@/components/ui/product-card"
 import { ProductCommunity } from "@/components/ui/product-community"
 import { products } from "@/lib/product-data"
 import { ArrowRight } from "lucide-react"
+import { ProductHero } from "@/components/ui/product-hero"
 
 import Link from "next/link"
 
@@ -47,8 +48,8 @@ export default function MarketingHome() {
       </section>
 
       {/* Products Sections */}
-      <div className="flex flex-col gap-32">
-        <div className="container mx-auto px-4 text-center">
+      <div className="flex flex-col">
+        <div className="container mx-auto px-4 text-center mb-16">
             <h2 className="text-3xl font-bold tracking-tight mb-4">Everything needed to build 3D apps</h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
                 From asset management to multi-player networking, Odyssey covers the entire lifecycle of spatial web development.
@@ -56,38 +57,17 @@ export default function MarketingHome() {
         </div>
 
         {products.map((product, index) => (
-          <section key={product.name} className="container mx-auto px-4">
-            <div className="flex flex-col items-center text-center max-w-3xl mx-auto space-y-6">
-              <div className="p-4 rounded-2xl bg-primary/10 text-primary">
-                 {/* Rendering the icon with a larger size wrapper or cloning if possible, 
-                     but since it's a node, we just render it. 
-                     Ideally we'd want a larger version of the icon here.
-                 */}
-                  <div className="[&>svg]:w-12 [&>svg]:h-12">
-                    {product.icon}
-                  </div>
-              </div>
-              
-              <h2 className="text-3xl md:text-4xl font-bold tracking-tight">{product.name}</h2>
-              <p className="text-xl text-muted-foreground leading-relaxed">
-                {product.description}
-              </p>
-              
-              <div className="flex items-center gap-4 pt-4">
-                <Link href={product.href}>
-                  <Button size="lg" variant="default">
-                    Learn more
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Button>
-                </Link>
-                {product.status === "beta" && (
-                   <div className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors border-transparent bg-blue-100 text-blue-800">
-                      Beta
-                   </div>
-                )}
-              </div>
-            </div>
-            {/* Optional: Add a subtle divider or visual break if you want, but ample whitespace (gap-32) usually looks cleaner */}
+          <section key={product.name} className="border-t">
+            <ProductHero
+              name={product.name}
+              description={product.description}
+              icon={product.icon}
+              status={product.status}
+              headingLevel="h2"
+              getStartedHref={product.href}
+              primaryActionLabel="Learn More"
+              isReverse={index % 2 !== 0}
+            />
           </section>
         ))}
       </div>
