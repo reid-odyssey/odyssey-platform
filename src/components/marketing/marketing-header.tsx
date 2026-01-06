@@ -19,7 +19,7 @@ import React from "react"
 export function MarketingHeader() {
   return (
     <header className="fixed w-full z-50 bg-background/80 backdrop-blur-md border-b">
-      <div className="container px-4 h-16 flex items-center justify-between">
+      <div className="container mx-auto px-4 h-16 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2">
            <OdysseyLogo />
         </Link>

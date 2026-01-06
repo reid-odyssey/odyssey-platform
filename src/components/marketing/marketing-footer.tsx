@@ -1,7 +1,7 @@
 export function MarketingFooter() {
   return (
     <footer className="bg-muted/30 border-t py-12">
-      <div className="container px-4 grid grid-cols-2 md:grid-cols-4 gap-8">
+      <div className="container mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-8">
         <div>
           <h3 className="font-bold mb-4">Product</h3>
           <ul className="space-y-2 text-sm text-muted-foreground">
@@ -36,7 +36,7 @@ export function MarketingFooter() {
             </p>
         </div>
       </div>
-      <div className="container px-4 mt-8 pt-8 border-t text-center text-sm text-muted-foreground">
+      <div className="container mx-auto px-4 mt-8 pt-8 border-t text-center text-sm text-muted-foreground">
         © {new Date().getFullYear()} Odyssey. All rights reserved.
       </div>
     </footer>
