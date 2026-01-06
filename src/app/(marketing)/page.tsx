@@ -60,7 +60,7 @@ export default function MarketingHome() {
           <section key={product.name} className="border-t">
             <ProductHero
               name={product.name}
-              description={product.description}
+              description={product.longDescription || product.description}
               icon={product.icon}
               status={product.status}
               headingLevel="h2"
