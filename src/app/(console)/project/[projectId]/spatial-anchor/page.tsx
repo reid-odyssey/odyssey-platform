@@ -25,8 +25,8 @@ export default async function SpatialAnchorPage({ params }: { params: Promise<{ 
       productDescription="Create persistent spatial anchors and reference points for immersive experiences with precise positioning and tracking capabilities."
       productIcon={<Anchor className="h-8 w-8" />}
       productStatus="enabled"
-      projectId={params.projectId}
-      currentPath={`/project/${params.projectId}/spatial-anchor`}
+      projectId={projectId}
+      currentPath={`/project/${projectId}/spatial-anchor`}
       mockProject={mockProject}
       mockProjects={mockProjects}
       mockUser={mockUser}

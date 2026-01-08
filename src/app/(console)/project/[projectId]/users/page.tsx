@@ -105,8 +105,8 @@ export default function UsersPage({ params }: { params: Promise<{ projectId: str
       <div className="max-w-[2000px] mx-auto">
         <div className="flex">
           <ConsoleSidebar 
-            projectId={params.projectId}
-            currentPath={`/project/${params.projectId}/users`}
+            projectId={projectId}
+            currentPath={`/project/${projectId}/users`}
             currentProject={mockProject}
             projects={mockProjects}
           />

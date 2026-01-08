@@ -25,8 +25,8 @@ export default async function ContentDeliveryPage({ params }: { params: Promise<
       productDescription="Global CDN for fast asset delivery to your applications"
       productIcon={<Truck className="h-8 w-8" />}
       productStatus="enabled"
-      projectId={params.projectId}
-      currentPath={`/project/${params.projectId}/content-delivery`}
+      projectId={projectId}
+      currentPath={`/project/${projectId}/content-delivery`}
       mockProject={mockProject}
       mockProjects={mockProjects}
       mockUser={mockUser}

@@ -25,8 +25,8 @@ export default async function SpatialCommsPage({ params }: { params: Promise<{ p
       productDescription="Real-time communication and collaboration in spatial environments"
       productIcon={<MessageSquare className="h-8 w-8" />}
       productStatus="enabled"
-      projectId={params.projectId}
-      currentPath={`/project/${params.projectId}/spatial-comms`}
+      projectId={projectId}
+      currentPath={`/project/${projectId}/spatial-comms`}
       mockProject={mockProject}
       mockProjects={mockProjects}
       mockUser={mockUser}

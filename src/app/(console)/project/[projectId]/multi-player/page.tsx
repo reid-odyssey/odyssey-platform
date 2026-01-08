@@ -25,8 +25,8 @@ export default async function MultiPlayerPage({ params }: { params: Promise<{ pr
       productDescription="Enable real-time multiplayer experiences in spatial environments with synchronized interactions, shared state management, and collaborative features."
       productIcon={<Users className="h-8 w-8" />}
       productStatus="enabled"
-      projectId={params.projectId}
-      currentPath={`/project/${params.projectId}/multi-player`}
+      projectId={projectId}
+      currentPath={`/project/${projectId}/multi-player`}
       mockProject={mockProject}
       mockProjects={mockProjects}
       mockUser={mockUser}

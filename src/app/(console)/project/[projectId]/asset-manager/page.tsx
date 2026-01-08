@@ -25,8 +25,8 @@ export default async function AssetManagerPage({ params }: { params: Promise<{ p
       productDescription="Manage and organize your 3D assets, textures, and media files with powerful tools for spatial computing applications. Upload, process, and deliver assets at scale."
       productIcon={<Package className="h-8 w-8" />}
       productStatus="enabled"
-      projectId={params.projectId}
-      currentPath={`/project/${params.projectId}/asset-manager`}
+      projectId={projectId}
+      currentPath={`/project/${projectId}/asset-manager`}
       mockProject={mockProject}
       mockProjects={mockProjects}
       mockUser={mockUser}

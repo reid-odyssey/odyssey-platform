@@ -25,8 +25,8 @@ export default async function HostingPage({ params }: { params: Promise<{ projec
       productDescription="Deploy and host your spatial applications with global edge delivery"
       productIcon={<Server className="h-8 w-8" />}
       productStatus="enabled"
-      projectId={params.projectId}
-      currentPath={`/project/${params.projectId}/hosting`}
+      projectId={projectId}
+      currentPath={`/project/${projectId}/hosting`}
       mockProject={mockProject}
       mockProjects={mockProjects}
       mockUser={mockUser}

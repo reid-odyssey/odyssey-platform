@@ -25,8 +25,8 @@ export default async function SpatialUIPage({ params }: { params: Promise<{ proj
       productDescription="Build immersive user interfaces for spatial computing environments"
       productIcon={<Layout className="h-8 w-8" />}
       productStatus="enabled"
-      projectId={params.projectId}
-      currentPath={`/project/${params.projectId}/spatial-ui`}
+      projectId={projectId}
+      currentPath={`/project/${projectId}/spatial-ui`}
       mockProject={mockProject}
       mockProjects={mockProjects}
       mockUser={mockUser}

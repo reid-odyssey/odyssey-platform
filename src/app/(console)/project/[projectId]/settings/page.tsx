@@ -51,8 +51,8 @@ export default function ProjectSettings({ params }: { params: Promise<{ projectI
       <div className="max-w-[2000px] mx-auto">
         <div className="flex">
           <ConsoleSidebar 
-            projectId={params.projectId}
-            currentPath={`/project/${params.projectId}/settings`}
+            projectId={projectId}
+            currentPath={`/project/${projectId}/settings`}
             currentProject={mockProject}
             projects={mockProjects}
           />

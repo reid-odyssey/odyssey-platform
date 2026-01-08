@@ -25,8 +25,8 @@ export default async function RealTimeEnginePage({ params }: { params: Promise<{
       productDescription="High-performance real-time rendering engine optimized for spatial computing with advanced physics, lighting, and interactive capabilities."
       productIcon={<Zap className="h-8 w-8" />}
       productStatus="enabled"
-      projectId={params.projectId}
-      currentPath={`/project/${params.projectId}/real-time-engine`}
+      projectId={projectId}
+      currentPath={`/project/${projectId}/real-time-engine`}
       mockProject={mockProject}
       mockProjects={mockProjects}
       mockUser={mockUser}

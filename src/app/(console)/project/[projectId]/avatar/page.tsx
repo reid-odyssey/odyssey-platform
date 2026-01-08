@@ -25,8 +25,8 @@ export default async function AvatarPage({ params }: { params: Promise<{ project
       productDescription="Create and manage realistic avatars for spatial experiences"
       productIcon={<User className="h-8 w-8" />}
       productStatus="enabled"
-      projectId={params.projectId}
-      currentPath={`/project/${params.projectId}/avatar`}
+      projectId={projectId}
+      currentPath={`/project/${projectId}/avatar`}
       mockProject={mockProject}
       mockProjects={mockProjects}
       mockUser={mockUser}

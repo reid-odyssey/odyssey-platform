@@ -25,8 +25,8 @@ export default async function ConfiguratorPage({ params }: { params: Promise<{ p
       productDescription="Visual configuration tools for spatial applications and environments"
       productIcon={<Settings className="h-8 w-8" />}
       productStatus="enabled"
-      projectId={params.projectId}
-      currentPath={`/project/${params.projectId}/configurator`}
+      projectId={projectId}
+      currentPath={`/project/${projectId}/configurator`}
       mockProject={mockProject}
       mockProjects={mockProjects}
       mockUser={mockUser}
