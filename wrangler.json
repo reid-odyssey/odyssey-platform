@@ -4,6 +4,5 @@
   "compatibility_flags": [
     "nodejs_compat"
   ],
-  "command": "npm run pages:build",
   "pages_build_output_dir": ".vercel/output/static"
 }
