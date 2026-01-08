@@ -20,7 +20,8 @@ export default async function middleware(req: NextRequest) {
   
   // Define the 'app' subdomain. In production, this would be "app.odyssey.com"
   // For local dev, you might use "app.localhost:3000" if you have host file setup
-  const isAppSubdomain = hostname.startsWith("app.");
+  // We check for "app." or "app-" to support environments like "app-dev" or "app-staging"
+  const isAppSubdomain = hostname.startsWith("app.") || hostname.startsWith("app-");
 
   if (isAppSubdomain) {
     // If the user is on 'app.domain.com', we want them to access the Console.
