@@ -52,7 +52,8 @@ const invoiceHistory = [
   { id: "INV-2023-012", date: "2023-12-01", amount: "$89.40", status: "Paid" }
 ]
 
-export default function BillingPage({ params }: { params: { projectId: string } }) {
+export default async function BillingPage({ params }: { params: Promise<{ projectId: string }> }) {
+  const { projectId } = await params
   const [isChatOpen, setIsChatOpen] = useState(false)
 
   const handleChatToggle = (isOpen: boolean) => {

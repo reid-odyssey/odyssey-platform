@@ -30,7 +30,8 @@ const mockUser = {
   avatar: "/avatars/john.jpg"
 }
 
-export default function ProjectSettings({ params }: { params: { projectId: string } }) {
+export default async function ProjectSettings({ params }: { params: Promise<{ projectId: string }> }) {
+  const { projectId } = await params
   const [showApiKey, setShowApiKey] = useState(false)
   const [isChatOpen, setIsChatOpen] = useState(false)
 

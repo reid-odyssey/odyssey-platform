@@ -85,7 +85,8 @@ const roleColors = {
   Viewer: "bg-gray-100 text-gray-800 border-gray-200"
 }
 
-export default function UsersPage({ params }: { params: { projectId: string } }) {
+export default async function UsersPage({ params }: { params: Promise<{ projectId: string }> }) {
+  const { projectId } = await params
   const [isChatOpen, setIsChatOpen] = useState(false)
 
   const handleChatToggle = (isOpen: boolean) => {

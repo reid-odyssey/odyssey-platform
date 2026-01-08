@@ -17,7 +17,8 @@ const mockUser = {
   avatar: "/avatars/john.jpg"
 }
 
-export default function ContentDeliveryPage({ params }: { params: { projectId: string } }) {
+export default async function ContentDeliveryPage({ params }: { params: Promise<{ projectId: string }> }) {
+  const { projectId } = await params
   return (
     <ProductPageTemplate
       productName="Content Delivery"
