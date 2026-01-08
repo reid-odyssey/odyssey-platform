@@ -12,7 +12,7 @@ import { Separator } from "@/components/ui/separator"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { AlertTriangle, Copy, Eye, EyeOff, Plus, Trash2 } from "lucide-react"
-import { useState } from "react"
+import { useState, use } from "react"
 
 const mockProject = {
   name: "agency-prod",
@@ -30,8 +30,8 @@ const mockUser = {
   avatar: "/avatars/john.jpg"
 }
 
-export default async function ProjectSettings({ params }: { params: Promise<{ projectId: string }> }) {
-  const { projectId } = await params
+export default function ProjectSettings({ params }: { params: Promise<{ projectId: string }> }) {
+  const { projectId } = use(params)
   const [showApiKey, setShowApiKey] = useState(false)
   const [isChatOpen, setIsChatOpen] = useState(false)
 

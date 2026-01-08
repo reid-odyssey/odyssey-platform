@@ -13,7 +13,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { useState } from "react"
+import { useState, use } from "react"
 import { MoreHorizontal, Plus, Send, Shield, User, Crown } from "lucide-react"
 
 const mockProject = {
@@ -85,8 +85,8 @@ const roleColors = {
   Viewer: "bg-gray-100 text-gray-800 border-gray-200"
 }
 
-export default async function UsersPage({ params }: { params: Promise<{ projectId: string }> }) {
-  const { projectId } = await params
+export default function UsersPage({ params }: { params: Promise<{ projectId: string }> }) {
+  const { projectId } = use(params)
   const [isChatOpen, setIsChatOpen] = useState(false)
 
   const handleChatToggle = (isOpen: boolean) => {

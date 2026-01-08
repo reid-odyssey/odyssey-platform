@@ -10,7 +10,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Progress } from "@/components/ui/progress"
 import { StatsCard } from "@/components/ui/stats-card"
-import { useState } from "react"
+import { useState, use } from "react"
 import { 
   CreditCard, 
   DollarSign, 
@@ -52,8 +52,8 @@ const invoiceHistory = [
   { id: "INV-2023-012", date: "2023-12-01", amount: "$89.40", status: "Paid" }
 ]
 
-export default async function BillingPage({ params }: { params: Promise<{ projectId: string }> }) {
-  const { projectId } = await params
+export default function BillingPage({ params }: { params: Promise<{ projectId: string }> }) {
+  const { projectId } = use(params)
   const [isChatOpen, setIsChatOpen] = useState(false)
 
   const handleChatToggle = (isOpen: boolean) => {
