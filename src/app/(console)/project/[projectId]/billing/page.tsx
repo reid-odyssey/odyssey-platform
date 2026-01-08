@@ -72,8 +72,8 @@ export default function BillingPage({ params }: { params: Promise<{ projectId: s
       <div className="max-w-[2000px] mx-auto">
         <div className="flex">
           <ConsoleSidebar 
-            projectId={params.projectId}
-            currentPath={`/project/${params.projectId}/billing`}
+            projectId={projectId}
+            currentPath={`/project/${projectId}/billing`}
             currentProject={mockProject}
             projects={mockProjects}
           />
