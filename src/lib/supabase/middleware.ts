@@ -42,12 +42,21 @@ export async function updateSession(request: NextRequest) {
     !request.nextUrl.pathname.startsWith("/login") &&
     !request.nextUrl.pathname.startsWith("/auth") &&
     // Allow public access to home and marketing pages, protect console/studio
-    (request.nextUrl.pathname.startsWith("/project") ||
-     request.nextUrl.pathname.startsWith("/studio"))
+    (request.nextUrl.pathname === "/" ||
+     request.nextUrl.pathname.startsWith("/project") ||
+     request.nextUrl.pathname.startsWith("/studio") || 
+     request.nextUrl.pathname.startsWith("/dashboard"))
   ) {
     // no user, potentially respond by redirecting the user to the login page
     const url = request.nextUrl.clone();
     url.pathname = "/login";
+    return NextResponse.redirect(url);
+  }
+
+  // If user is logged in and visits root, redirect to dashboard
+  if (user && request.nextUrl.pathname === "/") {
+    const url = request.nextUrl.clone();
+    url.pathname = "/dashboard";
     return NextResponse.redirect(url);
   }
 
