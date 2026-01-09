@@ -7,11 +7,40 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
 import { OdysseyLogo } from "@/components/ui/odyssey-logo"
-import { login, signInWithOAuth } from "./actions" // Import actions
+import { login, signup, signInWithOAuth } from "./actions" // Import actions
 import { Loader2 } from "lucide-react"
 
 export default function LoginPage() {
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const [successMessage, setSuccessMessage] = useState<string | null>(null)
+  const [isSignUp, setIsSignUp] = useState<boolean>(false)
+
+  const handleEmailAuth = async (formData: FormData) => {
+    setIsLoading(true)
+    setErrorMessage(null)
+    setSuccessMessage(null)
+    
+    try {
+      if (isSignUp) {
+        const result = await signup(formData)
+        if (result?.error) {
+          setErrorMessage(result.error)
+        } else if (result?.message) {
+          setSuccessMessage(result.message)
+        }
+      } else {
+        const result = await login(formData)
+        if (result?.error) {
+          setErrorMessage(result.error)
+        }
+      }
+    } catch (e) {
+       setErrorMessage("An unexpected network error occurred.")
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
   const handleOAuthLogin = async (provider: "github" | "google" | "azure" | "apple" | "keycloak") => {
     setIsLoading(true)
@@ -31,20 +60,26 @@ export default function LoginPage() {
           <OdysseyLogo size="lg" />
           <h1 className="text-2xl font-bold">Welcome to Odyssey Console</h1>
           <p className="text-muted-foreground text-center">
-            Sign in to access your projects and services
+             {isSignUp ? "Create an account to get started" : "Sign in to access your projects and services"}
           </p>
         </div>
 
         <Card>
           <CardHeader>
-            <CardTitle>Sign in</CardTitle>
-            <CardDescription>
-              Choose your preferred sign-in method
-            </CardDescription>
+            <CardTitle>{isSignUp ? "Create an account" : "Sign in"}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            
-            <form action={login} className="space-y-4">
+            {errorMessage && (
+              <div className="bg-destructive/15 text-destructive text-sm p-3 rounded-md">
+                {errorMessage}
+              </div>
+            )}
+             {successMessage && (
+              <div className="bg-green-500/15 text-green-700 text-sm p-3 rounded-md border border-green-200">
+                {successMessage}
+              </div>
+            )}
+            <form action={handleEmailAuth} className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
                 <Input
@@ -65,8 +100,8 @@ export default function LoginPage() {
                   required
                 />
               </div>
-              <Button type="submit" className="w-full">
-                Sign in
+              <Button type="submit" className="w-full" disabled={isLoading}>
+                {isLoading ? <Loader2 className="animate-spin" /> : (isSignUp ? "Sign up" : "Sign in")}
               </Button>
             </form>
 
@@ -76,39 +111,18 @@ export default function LoginPage() {
               </a>
             </div>
 
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <Separator />
-              </div>
-              <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-background px-2 text-muted-foreground">
-                  Enterprise SSO
-                </span>
-              </div>
+            <div className="pt-8 w-full">
+              <Button 
+                variant="outline"
+                className="w-full"
+                onClick={() => handleOAuthLogin("keycloak")}
+                disabled={isLoading}
+              >
+                <OdysseyLogo size="sm" iconOnly className="mr-2" />
+                Odyssey
+              </Button>
             </div>
-
-            <Button 
-               variant="secondary" 
-               className="w-full relative overflow-hidden bg-gradient-to-r from-indigo-900 to-purple-900 text-white hover:from-indigo-800 hover:to-purple-800 border-0"
-               onClick={() => handleOAuthLogin("keycloak")}
-               disabled={isLoading}
-            >
-               <div className="absolute inset-0 bg-white/10 opacity-0 hover:opacity-100 transition-opacity" />
-               <OdysseyLogo size="sm" className="mr-2 text-white" />
-               Log in with Odyssey SSO
-            </Button>
             
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <Separator />
-              </div>
-              <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-background px-2 text-muted-foreground">
-                  Or continue with
-                </span>
-              </div>
-            </div>
-
             <div className="grid grid-cols-2 gap-4">
                <Button variant="outline" onClick={() => handleOAuthLogin("google")} disabled={isLoading}>
                  <svg className="mr-2 h-4 w-4" aria-hidden="true" focusable="false" data-prefix="fab" data-icon="google" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 488 512"><path fill="currentColor" d="M488 261.8C488 403.3 391.1 504 248 504 110.8 504 0 393.2 0 256S110.8 8 248 8c66.8 0 123 24.5 166.3 64.9l-67.5 64.9C258.5 52.6 94.3 116.6 94.3 256c0 86.5 69.1 156.6 153.7 156.6 98.2 0 135-70.4 140.8-106.9H248v-85.3h236.1c2.3 12.7 3.9 24.9 3.9 41.4z"></path></svg>
@@ -131,10 +145,17 @@ export default function LoginPage() {
           </CardContent>
           <CardFooter className="flex justify-center">
             <div className="text-sm text-muted-foreground">
-              Don&apos;t have an account?{" "}
-              <a href="#" className="text-primary hover:underline">
-                Sign up
-              </a>
+              {isSignUp ? "Already have an account? " : "Don't have an account? "}
+              <button 
+                onClick={() => {
+                  setIsSignUp(!isSignUp)
+                  setErrorMessage(null)
+                  setSuccessMessage(null)
+                }} 
+                className="text-primary hover:underline font-medium bg-transparent border-0 p-0 cursor-pointer"
+              >
+                {isSignUp ? "Sign in" : "Sign up"}
+              </button>
             </div>
           </CardFooter>
         </Card>

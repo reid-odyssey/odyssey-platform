@@ -8,15 +8,22 @@ import { headers } from "next/headers";
 export async function login(formData: FormData) {
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
-  const supabase = await createClient();
+  
+  try {
+    const supabase = await createClient();
 
-  const { error } = await supabase.auth.signInWithPassword({
-    email,
-    password,
-  });
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
 
-  if (error) {
-    return { error: error.message };
+    if (error) {
+      console.error("Supabase Login Error:", error.message);
+      return { error: error.message };
+    }
+  } catch (err) {
+    console.error("Server Action Login Exception:", err);
+    return { error: "An unexpected error occurred. Check server logs." };
   }
 
   revalidatePath("/", "layout");
@@ -27,12 +34,15 @@ export async function signup(formData: FormData) {
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
   const supabase = await createClient();
+  
+  // Dynamic origin calculation for correct redirect in any environment
+  const origin = (await headers()).get("origin");
 
   const { error } = await supabase.auth.signUp({
     email,
     password,
     options: {
-      emailRedirectTo: `http://localhost:3000/auth/callback`, // Update with your actual domain
+      emailRedirectTo: `${origin}/auth/callback`,
     },
   });
 

@@ -11,6 +11,7 @@ export async function GET(request: Request) {
     const supabase = await createClient();
     const { error } = await supabase.auth.exchangeCodeForSession(code);
     if (!error) {
+      console.log("Auth callback success for code:", code.substring(0, 5) + "...");
       const forwardedHost = request.headers.get("x-forwarded-host"); // original origin before load balancer
       const isLocalEnv = process.env.NODE_ENV === "development";
       if (isLocalEnv) {
@@ -21,7 +22,11 @@ export async function GET(request: Request) {
       } else {
         return NextResponse.redirect(`${origin}${next}`);
       }
+    } else {
+      console.error("Auth Callback Error Details:", error);
     }
+  } else {
+    console.error("Auth Callback: No code provided");
   }
 
   // return the user to an error page with instructions
