@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Deploy
     environment: 
-      name: ${{ github.ref == 'refs/heads/main' && 'production' || 'dev' }}
+      name: ${{ github.ref == 'refs/heads/main' && 'prod' || 'dev' }}
       url: ${{ steps.deployment.outputs.url }}
     permissions:
       contents: read
