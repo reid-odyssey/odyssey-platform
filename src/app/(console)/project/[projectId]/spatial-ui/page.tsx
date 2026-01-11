@@ -17,8 +17,8 @@ const mockUser = {
   avatar: "/avatars/john.jpg"
 }
 
-export default function SpatialUIPage({ params }: { params: { projectId: string } }) {
-  const { projectId } = params
+export default async function SpatialUIPage({ params }: { params: Promise<{ projectId: string }> }) {
+  const { projectId } = await params
   return (
     <ProductPageTemplate
       productName="Spatial UI"
