@@ -17,8 +17,8 @@ const mockUser = {
   avatar: "/avatars/john.jpg"
 }
 
-export default async function AssetManagerPage({ params }: { params: Promise<{ projectId: string }> }) {
-  const { projectId } = await params
+export default function AssetManagerPage({ params }: { params: { projectId: string } }) {
+  const { projectId } = params
   return (
     <ProductPageTemplate
       productName="Asset Manager"
