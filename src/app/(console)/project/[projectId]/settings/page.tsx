@@ -30,8 +30,8 @@ const mockUser = {
   avatar: "/avatars/john.jpg"
 }
 
-export default function ProjectSettings({ params }: { params: Promise<{ projectId: string }> }) {
-  const { projectId } = use(params)
+export default function ProjectSettings({ params }: { params: { projectId: string } }) {
+  const { projectId } = params
   const [showApiKey, setShowApiKey] = useState(false)
   const [isChatOpen, setIsChatOpen] = useState(false)
 
