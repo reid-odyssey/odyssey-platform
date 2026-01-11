@@ -12,6 +12,12 @@ export async function updateSession(request: NextRequest) {
 
     if (!supabaseUrl || !supabaseKey) {
       console.error("Supabase environment variables are missing in middleware!");
+      
+      // Allow public access to the landing page even if Supabase is misconfigured
+      if (request.nextUrl.pathname === "/") {
+        return supabaseResponse;
+      }
+
       return new NextResponse(
         JSON.stringify({ 
           error: "Internal Server Error: Missing Supabase Environment Variables",

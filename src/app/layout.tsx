@@ -3,8 +3,6 @@ import { Inter, Space_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ui/theme-provider";
 
-export const runtime = "edge";
-
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
