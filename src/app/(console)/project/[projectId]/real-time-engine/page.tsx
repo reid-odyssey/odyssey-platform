@@ -17,8 +17,8 @@ const mockUser = {
   avatar: "/avatars/john.jpg"
 }
 
-export default function RealTimeEnginePage({ params }: { params: { projectId: string } }) {
-  const { projectId } = params
+export default async function RealTimeEnginePage({ params }: { params: Promise<{ projectId: string }> }) {
+  const { projectId } = await params
   return (
     <ProductPageTemplate
       productName="Real Time Engine"

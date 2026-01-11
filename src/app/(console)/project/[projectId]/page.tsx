@@ -100,8 +100,8 @@ const products = [
   }
 ]
 
-export default function ProjectOverview({ params }: { params: { projectId: string } }) {
-  const { projectId } = params
+export default function ProjectOverview({ params }: { params: Promise<{ projectId: string }> }) {
+  const { projectId } = use(params)
   const [isChatOpen, setIsChatOpen] = useState(false)
 
   const handleChatToggle = (isOpen: boolean) => {
