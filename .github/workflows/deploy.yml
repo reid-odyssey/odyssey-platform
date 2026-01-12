@@ -76,16 +76,64 @@ jobs:
       - name: Smoke Test Deployment
         run: |
           set -e
-          URL="${{ steps.deployment.outputs.url }}"
-          echo "Deployment URL: $URL"
-          for i in 1 2 3 4 5; do
-            code=$(curl -sS -o /dev/null -w "%{http_code}" "$URL/api/health" || true)
-            echo "Attempt $i: /api/health -> $code"
-            if [ "$code" = "200" ]; then
-              curl -sS "$URL/api/health"; echo
-              exit 0
+          REF="${{ github.ref }}"
+          DEPLOY_URL="${{ steps.deployment.outputs.url }}"
+
+          check_url() {
+            BASE="$1"
+            echo "==============================="
+            echo "Smoke testing: $BASE"
+
+            echo "--- /api/health ---"
+            for i in 1 2 3 4 5; do
+              code=$(curl --connect-timeout 5 --max-time 15 -sS -o /dev/null -w "%{http_code}" "$BASE/api/health" || true)
+              echo "Attempt $i: $code"
+              if [ "$code" = "200" ]; then
+                curl --connect-timeout 5 --max-time 15 -sS "$BASE/api/health"; echo
+                break
+              fi
+              sleep 3
+            done
+            code=$(curl --connect-timeout 5 --max-time 15 -sS -o /dev/null -w "%{http_code}" "$BASE/api/health" || true)
+            if [ "$code" != "200" ]; then
+              echo "Smoke test failed: $BASE/api/health did not return 200"
+              echo "Response headers:"; curl --connect-timeout 5 --max-time 15 -sS -D - -o /dev/null "$BASE/api/health" || true
+              exit 1
             fi
-            sleep 3
-          done
-          echo "Smoke test failed: /api/health did not return 200"
-          exit 1
+
+            echo "--- / (HTML) ---"
+            tmpfile=$(mktemp)
+            html_code=$(curl --connect-timeout 5 --max-time 20 -sS -o "$tmpfile" -w "%{http_code}" "$BASE/" || true)
+            echo "GET / -> $html_code"
+            if [ "$html_code" != "200" ] && [ "$html_code" != "301" ] && [ "$html_code" != "302" ] && [ "$html_code" != "307" ] && [ "$html_code" != "308" ]; then
+              echo "Response headers:"; curl --connect-timeout 5 --max-time 20 -sS -D - -o /dev/null "$BASE/" || true
+              echo "Response body (first 200 lines):"; sed -n '1,200p' "$tmpfile" || true
+              exit 1
+            fi
+
+            buildId=$(grep -oE '"buildId":"[^"]+"' "$tmpfile" | head -n 1 | sed -E 's/.*"buildId":"([^"]+)".*/\1/')
+            if [ -n "$buildId" ]; then
+              echo "Detected buildId: $buildId"
+              data_url="$BASE/_next/data/$buildId/index.json"
+              data_code=$(curl --connect-timeout 5 --max-time 20 -sS -o /dev/null -w "%{http_code}" -I "$data_url" || true)
+              echo "HEAD /_next/data/<buildId>/index.json -> $data_code"
+              # Next App Router may not serve _next/data; treat 404 as acceptable, but fail on 5xx.
+              if [ "$data_code" = "500" ] || [ "$data_code" = "502" ] || [ "$data_code" = "503" ] || [ "$data_code" = "504" ]; then
+                echo "Response headers:"; curl --connect-timeout 5 --max-time 20 -sS -D - -o /dev/null -I "$data_url" || true
+                exit 1
+              fi
+            else
+              echo "No buildId found in HTML; skipping /_next/data check"
+            fi
+          }
+
+          # Always test the Pages deployment URL.
+          check_url "$DEPLOY_URL"
+
+          # Also test custom domains to catch alias/DNS/config issues.
+          if [ "$REF" = "refs/heads/main" ]; then
+            check_url "https://app.2x22.com"
+          else
+            check_url "https://app-dev.2x22.com"
+            check_url "https://staging.2x22.com"
+          fi
