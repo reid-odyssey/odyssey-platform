@@ -3,6 +3,7 @@ import { NextResponse, type NextRequest } from "next/server";
 
 export async function updateSession(request: NextRequest) {
   try {
+    const pathname = request.nextUrl.pathname;
     let supabaseResponse = NextResponse.next({
       request,
     });
@@ -10,29 +11,27 @@ export async function updateSession(request: NextRequest) {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
     const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
+    // Never run auth middleware for internal Next.js asset/data routes.
+    if (pathname.startsWith("/_next/")) {
+      return supabaseResponse;
+    }
+
     if (!supabaseUrl || !supabaseKey) {
       console.error("Supabase environment variables are missing in middleware!");
-      
-      // Allow public access to the landing page even if Supabase is misconfigured
-      if (request.nextUrl.pathname === "/") {
-        return supabaseResponse;
+
+      // Degrade gracefully: allow public pages to render; protect console routes by redirect.
+      const isProtectedRoute =
+        pathname.startsWith("/project") ||
+        pathname.startsWith("/studio") ||
+        pathname.startsWith("/dashboard");
+
+      if (isProtectedRoute) {
+        const url = request.nextUrl.clone();
+        url.pathname = "/login";
+        return NextResponse.redirect(url);
       }
 
-      return new NextResponse(
-        JSON.stringify({ 
-          error: "Internal Server Error: Missing Supabase Environment Variables",
-          details: {
-            url: !!supabaseUrl,
-            key: !!supabaseKey
-          }
-        }),
-        { 
-          status: 500,
-          headers: {
-            'content-type': 'application/json'
-          }
-        }
-      );
+      return supabaseResponse;
     }
 
     const supabase = createServerClient(
@@ -68,13 +67,10 @@ export async function updateSession(request: NextRequest) {
 
     if (
       !user &&
-      !request.nextUrl.pathname.startsWith("/login") &&
-      !request.nextUrl.pathname.startsWith("/auth") &&
-      // Allow public access to home and marketing pages, protect console/studio
-      (request.nextUrl.pathname === "/" ||
-       request.nextUrl.pathname.startsWith("/project") ||
-       request.nextUrl.pathname.startsWith("/studio") || 
-       request.nextUrl.pathname.startsWith("/dashboard"))
+      !pathname.startsWith("/login") &&
+      !pathname.startsWith("/auth") &&
+      // Public: '/', marketing. Protected: console/studio/dashboard.
+      (pathname.startsWith("/project") || pathname.startsWith("/studio") || pathname.startsWith("/dashboard"))
     ) {
       // no user, potentially respond by redirecting the user to the login page
       const url = request.nextUrl.clone();
@@ -83,7 +79,7 @@ export async function updateSession(request: NextRequest) {
     }
 
     // If user is logged in and visits root, redirect to dashboard
-    if (user && request.nextUrl.pathname === "/") {
+    if (user && pathname === "/") {
       const url = request.nextUrl.clone();
       url.pathname = "/dashboard";
       return NextResponse.redirect(url);
@@ -91,16 +87,20 @@ export async function updateSession(request: NextRequest) {
 
     return supabaseResponse;
   } catch (err: any) {
+    // Never break app boot for internal asset/data requests.
+    if (request.nextUrl.pathname.startsWith("/_next/")) {
+      return NextResponse.next({ request });
+    }
+
     console.error("Middleware Error:", err);
     return new NextResponse(
-      JSON.stringify({ 
+      JSON.stringify({
         error: "Critical Middleware Error",
-        message: err.message,
-        stack: err.stack
+        message: err?.message,
       }),
-      { 
+      {
         status: 500,
-        headers: { 'content-type': 'application/json' }
+        headers: { "content-type": "application/json" },
       }
     );
   }
