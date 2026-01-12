@@ -51,6 +51,17 @@ jobs:
       - name: Build
         run: npm run pages:build
 
+      - name: Sync Cloudflare Pages Secrets
+        run: |
+          PROJECT_NAME=${{ github.ref == 'refs/heads/main' && 'odyssey-platform' || 'odyssey-platform-dev' }}
+          echo "$NEXT_PUBLIC_SUPABASE_URL" | npx wrangler pages secret put NEXT_PUBLIC_SUPABASE_URL --project-name "$PROJECT_NAME"
+          echo "$NEXT_PUBLIC_SUPABASE_ANON_KEY" | npx wrangler pages secret put NEXT_PUBLIC_SUPABASE_ANON_KEY --project-name "$PROJECT_NAME"
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/pages-action@v1
         with:

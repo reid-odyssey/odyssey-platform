@@ -1,0 +1,15 @@
+# Cloudflare configuration for Pages/Workers.
+#
+# NOTE:
+# - Do NOT commit sensitive values here.
+# - Use Cloudflare Pages Secrets (or `wrangler pages secret put`) for secrets.
+
+compatibility_date = "2026-01-12"
+
+# Used by Wrangler when running Pages-related commands.
+pages_build_output_dir = ".vercel/output/static"
+
+[vars]
+# Non-sensitive runtime variables can go here.
+# Example:
+# NEXT_PUBLIC_APP_ENV = "production"
