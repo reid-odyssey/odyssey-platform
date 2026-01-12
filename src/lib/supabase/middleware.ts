@@ -8,6 +8,11 @@ export async function updateSession(request: NextRequest) {
       request,
     });
 
+    const isProtectedRoute =
+      pathname.startsWith("/project") ||
+      pathname.startsWith("/studio") ||
+      pathname.startsWith("/dashboard");
+
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
     const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
@@ -21,15 +26,16 @@ export async function updateSession(request: NextRequest) {
       return supabaseResponse;
     }
 
+    // Public routes don't need Supabase session refresh.
+    // This prevents a Supabase outage/misbehavior from taking the entire site down.
+    if (!isProtectedRoute) {
+      return supabaseResponse;
+    }
+
     if (!supabaseUrl || !supabaseKey) {
       console.error("Supabase environment variables are missing in middleware!");
 
       // Degrade gracefully: allow public pages to render; protect console routes by redirect.
-      const isProtectedRoute =
-        pathname.startsWith("/project") ||
-        pathname.startsWith("/studio") ||
-        pathname.startsWith("/dashboard");
-
       if (isProtectedRoute) {
         const url = request.nextUrl.clone();
         url.pathname = "/login";
@@ -80,30 +86,23 @@ export async function updateSession(request: NextRequest) {
       return NextResponse.redirect(url);
     }
 
-    // If user is logged in and visits root, redirect to dashboard
-    if (user && pathname === "/") {
+    return supabaseResponse;
+  } catch (err: any) {
+    const pathname = request.nextUrl.pathname;
+    const isProtectedRoute =
+      pathname.startsWith("/project") ||
+      pathname.startsWith("/studio") ||
+      pathname.startsWith("/dashboard");
+
+    console.error("Middleware Error:", err);
+
+    // If auth middleware fails, protect private routes, but never take down public pages.
+    if (isProtectedRoute) {
       const url = request.nextUrl.clone();
-      url.pathname = "/dashboard";
+      url.pathname = "/login";
       return NextResponse.redirect(url);
     }
 
-    return supabaseResponse;
-  } catch (err: any) {
-    // Never break app boot for internal asset/data requests.
-    if (request.nextUrl.pathname.startsWith("/_next/")) {
-      return NextResponse.next({ request });
-    }
-
-    console.error("Middleware Error:", err);
-    return new NextResponse(
-      JSON.stringify({
-        error: "Critical Middleware Error",
-        message: err?.message,
-      }),
-      {
-        status: 500,
-        headers: { "content-type": "application/json" },
-      }
-    );
+    return NextResponse.next({ request });
   }
 }
