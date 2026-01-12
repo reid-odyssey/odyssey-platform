@@ -101,23 +101,23 @@ jobs:
               exit 1
             fi
 
-            echo "--- /__smoke (root layout) ---"
-            smoke_code=$(curl --connect-timeout 5 --max-time 20 -sS -o /dev/null -w "%{http_code}" "$BASE/__smoke" || true)
-            echo "GET /__smoke -> $smoke_code"
+            echo "--- /smoke (root layout) ---"
+            smoke_code=$(curl --connect-timeout 5 --max-time 20 -sS -o /dev/null -w "%{http_code}" "$BASE/smoke" || true)
+            echo "GET /smoke -> $smoke_code"
             if [ "$smoke_code" != "200" ]; then
-              echo "Smoke test failed: $BASE/__smoke did not return 200"
-              echo "Response headers:"; curl --connect-timeout 5 --max-time 20 -sS -D - -o /dev/null "$BASE/__smoke" || true
-              echo "Response body (first 200 lines):"; curl --connect-timeout 5 --max-time 20 -sS "$BASE/__smoke" | sed -n '1,200p' || true
+              echo "Smoke test failed: $BASE/smoke did not return 200"
+              echo "Response headers:"; curl --connect-timeout 5 --max-time 20 -sS -D - -o /dev/null "$BASE/smoke" || true
+              echo "Response body (first 200 lines):"; curl --connect-timeout 5 --max-time 20 -sS "$BASE/smoke" | sed -n '1,200p' || true
               exit 1
             fi
 
-            echo "--- /__smoke-marketing (marketing layout) ---"
-            marketing_smoke_code=$(curl --connect-timeout 5 --max-time 20 -sS -o /dev/null -w "%{http_code}" "$BASE/__smoke-marketing" || true)
-            echo "GET /__smoke-marketing -> $marketing_smoke_code"
+            echo "--- /smoke-marketing (marketing layout) ---"
+            marketing_smoke_code=$(curl --connect-timeout 5 --max-time 20 -sS -o /dev/null -w "%{http_code}" "$BASE/smoke-marketing" || true)
+            echo "GET /smoke-marketing -> $marketing_smoke_code"
             if [ "$marketing_smoke_code" != "200" ]; then
-              echo "Smoke test failed: $BASE/__smoke-marketing did not return 200"
-              echo "Response headers:"; curl --connect-timeout 5 --max-time 20 -sS -D - -o /dev/null "$BASE/__smoke-marketing" || true
-              echo "Response body (first 200 lines):"; curl --connect-timeout 5 --max-time 20 -sS "$BASE/__smoke-marketing" | sed -n '1,200p' || true
+              echo "Smoke test failed: $BASE/smoke-marketing did not return 200"
+              echo "Response headers:"; curl --connect-timeout 5 --max-time 20 -sS -D - -o /dev/null "$BASE/smoke-marketing" || true
+              echo "Response body (first 200 lines):"; curl --connect-timeout 5 --max-time 20 -sS "$BASE/smoke-marketing" | sed -n '1,200p' || true
               exit 1
             fi
 
