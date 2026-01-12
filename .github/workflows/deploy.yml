@@ -63,6 +63,7 @@ jobs:
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
 
       - name: Deploy to Cloudflare Pages
+        id: deployment
         uses: cloudflare/pages-action@v1
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
@@ -71,3 +72,20 @@ jobs:
           directory: .vercel/output/static
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
           branch: ${{ github.ref_name }}
+
+      - name: Smoke Test Deployment
+        run: |
+          set -e
+          URL="${{ steps.deployment.outputs.url }}"
+          echo "Deployment URL: $URL"
+          for i in 1 2 3 4 5; do
+            code=$(curl -sS -o /dev/null -w "%{http_code}" "$URL/api/health" || true)
+            echo "Attempt $i: /api/health -> $code"
+            if [ "$code" = "200" ]; then
+              curl -sS "$URL/api/health"; echo
+              exit 0
+            fi
+            sleep 3
+          done
+          echo "Smoke test failed: /api/health did not return 200"
+          exit 1
