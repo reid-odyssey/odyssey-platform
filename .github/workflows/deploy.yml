@@ -78,14 +78,43 @@ jobs:
           set -e
           URL="${{ steps.deployment.outputs.url }}"
           echo "Deployment URL: $URL"
+
+          echo "--- /api/health ---"
           for i in 1 2 3 4 5; do
             code=$(curl -sS -o /dev/null -w "%{http_code}" "$URL/api/health" || true)
-            echo "Attempt $i: /api/health -> $code"
+            echo "Attempt $i: $code"
             if [ "$code" = "200" ]; then
               curl -sS "$URL/api/health"; echo
-              exit 0
+              break
             fi
             sleep 3
           done
-          echo "Smoke test failed: /api/health did not return 200"
-          exit 1
+          code=$(curl -sS -o /dev/null -w "%{http_code}" "$URL/api/health" || true)
+          if [ "$code" != "200" ]; then
+            echo "Smoke test failed: /api/health did not return 200"
+            exit 1
+          fi
+
+          echo "--- / (HTML) ---"
+          html_code=$(curl -sS -o /tmp/index.html -w "%{http_code}" "$URL/" || true)
+          echo "GET / -> $html_code"
+          if [ "$html_code" != "200" ] && [ "$html_code" != "302" ] && [ "$html_code" != "307" ]; then
+            echo "Response headers:"; curl -sS -D - -o /dev/null "$URL/" || true
+            echo "Response body (first 200 lines):"; sed -n '1,200p' /tmp/index.html || true
+            exit 1
+          fi
+
+          buildId=$(grep -oE '"buildId":"[^"]+"' /tmp/index.html | head -n 1 | sed -E 's/.*"buildId":"([^"]+)".*/\1/')
+          if [ -n "$buildId" ]; then
+            echo "Detected buildId: $buildId"
+            data_url="$URL/_next/data/$buildId/index.json"
+            data_code=$(curl -sS -o /dev/null -w "%{http_code}" "$data_url" || true)
+            echo "GET /_next/data/<buildId>/index.json -> $data_code"
+            if [ "$data_code" != "200" ] && [ "$data_code" != "304" ]; then
+              echo "Response headers:"; curl -sS -D - -o /dev/null "$data_url" || true
+              echo "Response body:"; curl -sS "$data_url" || true
+              exit 1
+            fi
+          else
+            echo "No buildId found in HTML; skipping /_next/data check"
+          fi
