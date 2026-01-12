@@ -16,6 +16,11 @@ export async function updateSession(request: NextRequest) {
       return supabaseResponse;
     }
 
+    // Allow health checks even if auth/env is misconfigured.
+    if (pathname === "/api/health") {
+      return supabaseResponse;
+    }
+
     if (!supabaseUrl || !supabaseKey) {
       console.error("Supabase environment variables are missing in middleware!");
 
