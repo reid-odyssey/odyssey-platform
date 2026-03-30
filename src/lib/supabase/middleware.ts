@@ -4,6 +4,10 @@ import { NextResponse, type NextRequest } from "next/server";
 export async function updateSession(request: NextRequest) {
   try {
     const pathname = request.nextUrl.pathname;
+    const hostname = request.nextUrl.hostname;
+    const isLocalhost = hostname === "localhost" || hostname === "127.0.0.1";
+    const authBypassEnabled = process.env.NEXT_PUBLIC_LOCAL_AUTH_BYPASS === "true";
+    const isBypassAllowed = process.env.NODE_ENV !== "production" && isLocalhost && authBypassEnabled;
     let supabaseResponse = NextResponse.next({
       request,
     });
@@ -29,6 +33,11 @@ export async function updateSession(request: NextRequest) {
     // Public routes don't need Supabase session refresh.
     // This prevents a Supabase outage/misbehavior from taking the entire site down.
     if (!isProtectedRoute) {
+      return supabaseResponse;
+    }
+
+    // Optional local dev bypass for protected routes.
+    if (isBypassAllowed && isProtectedRoute) {
       return supabaseResponse;
     }
 

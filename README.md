@@ -50,6 +50,16 @@ npm run dev
 3. **Open your browser**:
 Navigate to [http://localhost:3000](http://localhost:3000)
 
+## Environment Variables
+
+For authentication to work in production, set:
+
+- `NEXT_PUBLIC_SUPABASE_URL`
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+- `NEXT_PUBLIC_APP_URL` (recommended, e.g. `https://app.2x22.com`)
+
+`NEXT_PUBLIC_APP_URL` is used for deterministic auth callback redirects and avoids host/origin mismatches behind proxies/CDNs.
+
 ## Project Structure
 
 ```
